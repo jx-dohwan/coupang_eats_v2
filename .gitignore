@@ -1,0 +1,76 @@
+# =============================================================================
+# CoupangEats2 — root .gitignore
+# =============================================================================
+
+# OS / IDE
+.DS_Store
+**/.DS_Store
+.cursor/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Nested solo-repo backup (backend had its own .git)
+**/.git.upstream-backup/
+**/.git.backup/
+
+# Node
+**/node_modules/
+**/dist/
+**/build/
+**/.next/
+**/coverage/
+**/.nyc_output/
+
+# Env & secrets (examples만 허용)
+.env
+.env.*
+!.env.example
+!**/.env.example
+**/dotenv/.env.local
+**/dotenv/.env
+!**/dotenv/.env.example
+*.pem
+*.key
+*credentials*
+!*credentials*.md
+!*credentials*.example*
+user*_accessKeys.csv
+**/secrets/
+
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl.bak
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+tfplan-*
+*.tfvars
+*.tfvars.json
+*.auto.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# plan 산출물 (확장자 없는 이름 포함)
+**/environments/**/tfplan*
+
+# Logs / temp
+*.log
+logs/
+.tmp/
+.temp/
+tmp/
+
+# Python / misc
+__pycache__/
+*.pyc
+.venv/
+.pptx-venv/
+
+# Package locks optional keep — we KEEP package-lock.json / pnpm-lock

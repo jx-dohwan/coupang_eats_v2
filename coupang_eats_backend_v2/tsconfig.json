@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    // 1. 최신 모듈 시스템 설정
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "target": "ES2023",
+    "resolvePackageJsonExports": true,
+
+    // 2. NestJS 기본 및 Decorator 설정
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+    // 3. 컴파일 및 유틸리티 설정
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+
+    // 4. (권장) 엄격한 타입 검사 설정
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}

@@ -1,0 +1,45 @@
+services:
+  # 1. 개발용 MySQL (NestJS 앱이 사용할 메인 DB)
+  mysql-dev:
+    image: mysql:8       # 'latest' 대신 8버전 고정 (안정성)
+    container_name: local-mysql-dev
+    ports:
+      - '3306:3306'    # NestJS 앱이 접속할 포트
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'  # 루트 비밀번호 (보안을 위해 변경 가능)
+      MYSQL_DATABASE: 'coupang_dev' # 개발용 데이터베이스 이름
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'admin'       # NestJS 앱이 사용할 비밀번호
+    volumes:
+      - mysql_dev_data:/var/lib/mysql # 데이터 영속화
+    restart: always
+
+  # 2. E2E 테스트용 MySQL (테스트 코드가 사용할 DB)
+  mysql-test:
+    image: mysql:8       # 개발용과 동일한 버전으로 고정
+    container_name: local-mysql-test
+    ports:
+      - '3307:3306'    # 포트 충돌 방지 (3307로 접속)
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+      MYSQL_DATABASE: 'coupang_test' # 테스트용 데이터베이스 이름
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'admin'
+    volumes:
+      - mysql_test_data:/var/lib/mysql # 데이터 영속화
+    restart: always
+
+  # 3. Redis (ioredis가 사용할 캐시/세션 스토어)
+  redis:
+    image: redis:7       # 'latest' 대신 7버전 고정 (안정성)
+    container_name: local-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data   # 데이터 영속화
+    restart: always
+
+volumes:
+  mysql_dev_data:  # 개발용 DB 데이터
+  mysql_test_data: # 테스트용 DB 데이터
+  redis_data:      # Redis 데이터

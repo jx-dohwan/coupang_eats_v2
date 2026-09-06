@@ -1,0 +1,54 @@
+name: Deploy to Amazon ECS (Terraform Managed)
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: ap-northeast-2
+  # ⚠️ 중요: 아래 이름들을 테라폼에서 지정한 이름(var.project_name-var.environment-...)으로 정확히 맞춰주세요!
+  ECR_REPOSITORY: coupang-eats-dev-repo 
+  ECS_CLUSTER: coupang-eats-dev-cluster
+  ECS_SERVICE: coupang-eats-dev-service
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          # 기존에 잘 설정해두신 OIDC 역할 ARN 그대로 사용
+          role-to-assume: arn:aws:iam::441866789243:role/github-actions-ecs-deploy-role
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          # 테라폼의 image 속성과 맞추기 위해 latest 태그 사용
+          IMAGE_TAG: latest 
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      # ⭐ 핵심 변경 사항: 기존의 render-task-def 과정을 없애고, AWS CLI로 강제 재시작만 지시합니다.
+      # 테라폼이 뼈대를 꽉 잡고 있으므로, ECS는 방금 ECR에 푸시된 latest 이미지를 다운받아 새 컨테이너를 띄웁니다.
+      - name: Force ECS Service deployment
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.ECS_SERVICE }} \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
+
