@@ -1,24 +1,32 @@
 # -------------------------------------------------------------------------
-# Terraform Gitignore
+# Terraform — 올라가면 안 되는 것
 # -------------------------------------------------------------------------
 
-# 테라폼 프로바이더 플러그인 및 모듈이 설치되는 로컬 숨김 폴더 (절대 올리지 않음)
+# 로컬 플러그인 / 모듈 캐시
 **/.terraform/*
 
-# 테라폼 상태 파일 및 백업 파일 (민감 정보 포함, S3에서 관리하므로 절대 올리지 않음)
+# 상태 파일 (시크릿·리소스 ID 포함)
 *.tfstate
 *.tfstate.*
 
-# 테라폼 실행 계획 파일 (plan 결과를 파일로 저장했을 경우)
+# plan 산출물
 *.tfplan
 tfplan
 tfplan-*
 
-# 민감한 환경 변수가 들어갈 수 있는 tfvars 파일 (절대 올리지 않음)
+# 민감 변수
 *.tfvars
 *.tfvars.json
 *.auto.tfvars
+!*.tfvars.example
 
-# 테라폼 크래시 로그
+# 크래시 / override
 crash.log
 crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OS
+.DS_Store
