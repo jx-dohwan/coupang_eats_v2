@@ -1,45 +1,58 @@
 # =============================================================================
-# CoupangEats2 — root .gitignore
+# CoupangEats2 — 올라가면 안 되는 것 (root .gitignore)
 # =============================================================================
 
-# OS / IDE
+# ----- 블로그 문서 (로컬·블로그에만 둠, 레포 제외) -----
+*.md
+!**/.env.example
+
+# ----- OS / IDE -----
 .DS_Store
 **/.DS_Store
+Thumbs.db
 .cursor/
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
-# Nested solo-repo backup (backend had its own .git)
+# ----- Nested solo-repo backup (backend 기존 .git) -----
 **/.git.upstream-backup/
 **/.git.backup/
 
-# Node
+# ----- Node / 빌드 산출물 -----
 **/node_modules/
 **/dist/
 **/build/
 **/.next/
 **/coverage/
 **/.nyc_output/
+*.tsbuildinfo
 
-# Env & secrets (examples만 허용)
+# ----- 환경변수 · 시크릿 (example만 허용) -----
 .env
 .env.*
 !.env.example
 !**/.env.example
-**/dotenv/.env.local
 **/dotenv/.env
+**/dotenv/.env.*
 !**/dotenv/.env.example
 *.pem
 *.key
+*.p12
+*.pfx
 *credentials*
 !*credentials*.md
 !*credentials*.example*
+*_accessKeys.csv
 user*_accessKeys.csv
 **/secrets/
+.aws/
+**/id_rsa
+**/id_ed25519
 
-# Terraform
+# ----- Terraform (상태·플랜·로컬 플러그인) -----
 **/.terraform/
 **/.terraform.lock.hcl.bak
 *.tfstate
@@ -47,6 +60,7 @@ user*_accessKeys.csv
 *.tfplan
 tfplan
 tfplan-*
+**/environments/**/tfplan*
 *.tfvars
 *.tfvars.json
 *.auto.tfvars
@@ -57,20 +71,17 @@ override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
-# plan 산출물 (확장자 없는 이름 포함)
-**/environments/**/tfplan*
 
-# Logs / temp
+# ----- 로그 / 임시 -----
 *.log
 logs/
 .tmp/
 .temp/
 tmp/
+*.bak
 
-# Python / misc
+# ----- Python / 기타 -----
 __pycache__/
 *.pyc
 .venv/
 .pptx-venv/
-
-# Package locks optional keep — we KEEP package-lock.json / pnpm-lock
