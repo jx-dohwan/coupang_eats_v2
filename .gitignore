@@ -5,14 +5,23 @@
 # ----- 로컬 전용 디렉터리 (docs, scripts) -----
 /docs/
 /scripts/
+coupang_eats_backend_v2/doc/
+**/doc/
+**/docs/
 
-# ----- 블로그 문서 (로컬·블로그에만 둠, 레포 제외) -----
+# ----- 마크다운 문서 (오직 루트의 README.md만 허용) -----
 *.md
+!/README.md
+
+# 하위 특정 서브 프로젝트 문서 명시적 차단
+coupang_eats_frontend_v2/README.md
+dev_infra/environments/dev/README.md
 
 # ----- OS / IDE -----
 .DS_Store
 **/.DS_Store
 Thumbs.db
+ehthumbs.db
 .cursor/
 .idea/
 .vscode/
@@ -32,6 +41,10 @@ Thumbs.db
 **/coverage/
 **/.nyc_output/
 *.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # ----- 환경변수 · 시크릿 (example만 허용) -----
 .env
@@ -75,6 +88,28 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# ----- Docker & 로컬 DB 데이터 볼륨 -----
+docker-compose.override.yml
+.docker/
+/data/
+/db_data/
+/mysql_data/
+*.sql
+*.dump
+*.sqlite
+*.sqlite3
+*.db
+
+# ----- Kubernetes (EKS) -----
+kubeconfig
+*kubeconfig*
+.kube/
+
+# ----- Serverless / Lambda -----
+*.zip
+.serverless/
+.aws-sam/
+
 # ----- 로그 / 임시 -----
 *.log
 logs/
@@ -83,8 +118,16 @@ logs/
 tmp/
 *.bak
 
-# ----- Python / 기타 -----
+# ----- Python / 가상환경 -----
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 .venv/
 .pptx-venv/
+venv/
+env/
+ENV/
+.env/
+.pytest_cache/
+*.egg-info/
