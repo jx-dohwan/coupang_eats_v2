@@ -41,7 +41,5 @@ COPY --from=builder /app/dist ./dist
 # 애플리케이션 포트 노출 (NestJS 기본값 3000)
 EXPOSE 3000
 
-# [권장] 'node dist/main'으로 실행 (가장 빠르고 가벼움)
-# package.json의 "start:prod" 스크립트 내용과 동일합니다.
-# CMD ["node", "dist/src/main"]
-CMD sh -c "npm run migration:run && npm run start:prod" 
+# [권장] 프로덕션 이미지에는 ts-node 없음 → typeorm JS CLI 사용
+CMD sh -c "node ./node_modules/typeorm/cli.js migration:run -d dist/src/data-source.js && npm run start:prod" 

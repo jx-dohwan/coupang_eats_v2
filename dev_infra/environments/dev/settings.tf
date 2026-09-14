@@ -20,6 +20,10 @@ locals {
   db_data_volume_size   = 20
   backup_retention_days = 7
 
+  # ALB WAFv2 (기본 on · 비용 민감하면 false)
+  enable_waf     = true
+  waf_rate_limit = 2000
+
   tags = {
     Environment = "dev"
   }

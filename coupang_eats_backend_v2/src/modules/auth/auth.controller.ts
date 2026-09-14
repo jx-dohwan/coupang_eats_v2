@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -131,7 +132,12 @@ export class AuthController {
   @Get('verify-email')
   @HttpCode(HttpStatus.OK)
   async verifyEmail(@Query('token') token: string) {
-    await this.authService.verifyEmail(token);
+    if (!token?.trim()) {
+      throw new BadRequestException(
+        '인증 토큰이 없습니다. 메일에서 받은 링크를 그대로 열어 주세요.',
+      );
+    }
+    await this.authService.verifyEmail(token.trim());
     return {
       message:
         '이메일 인증이 성공적으로 완료되었습니다. 이제 로그인할 수 있습니다.',

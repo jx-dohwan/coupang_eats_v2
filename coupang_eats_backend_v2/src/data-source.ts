@@ -1,13 +1,18 @@
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import * as path from 'path';
-import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
-// 로컬: dotenv/.env.local, ECS: Task Definition으로 주입된 process.env 우선
+// 로컬 전용 .env (프로덕션/Compose는 process.env 주입 — dotenv 패키지 불필요)
 const localEnvPath = path.join(__dirname, '../dotenv/.env.local');
 if (fs.existsSync(localEnvPath)) {
-  dotenv.config({ path: localEnvPath });
+  try {
+    // optional: local only
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require('dotenv').config({ path: localEnvPath });
+  } catch {
+    /* dotenv not installed in prod image */
+  }
 }
 
 export const AppDataSource = new DataSource({

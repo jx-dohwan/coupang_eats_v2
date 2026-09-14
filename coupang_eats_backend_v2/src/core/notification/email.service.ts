@@ -19,7 +19,7 @@ export class EmailService implements INotificationService {
     token: string,
   ): Promise<void> {
     const baseUrl = this.configService.get('APP.BASE_URL', { infer: true });
-    const verifyUrl = `${baseUrl}/auth/verify-email?token=${token}`;
+    const verifyUrl = `${baseUrl}/verify-email?token=${token}`;
 
     this.loggerService.info(
       this.sendWelcomeNotification.name,
@@ -37,6 +37,15 @@ export class EmailService implements INotificationService {
         <small>${verifyUrl}</small>
       </div>
     `;
+
+    // AWS 스모크/로컬: SES 미구성 시 회원가입이 막히지 않도록 스킵
+    if (process.env.SKIP_EMAIL_NOTIFICATION === 'true') {
+      this.loggerService.info(
+        this.sendWelcomeNotification.name,
+        `SKIP_EMAIL_NOTIFICATION=true — skip SES (verifyUrl=${verifyUrl})`,
+      );
+      return;
+    }
 
     //  실제 전송 (Keyless)
     // 샌드박스 모드에서는 '수신자(email)'도 AWS 콘솔에서 검증된 이메일이어야 합니다.

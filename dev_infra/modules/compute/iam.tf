@@ -87,6 +87,34 @@ resource "aws_iam_role_policy" "app_cloudwatch_logs" {
   })
 }
 
+# Nest /uploads → S3 PutObject (Instance Profile)
+resource "aws_iam_role_policy" "app_s3_uploads" {
+  name = "${var.name_prefix}-app-s3-uploads"
+  role = aws_iam_role.app.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject",
+          "s3:AbortMultipartUpload",
+          "s3:ListMultipartUploadParts"
+        ]
+        Resource = ["${aws_s3_bucket.uploads.arn}/*"]
+      },
+      {
+        Effect   = "Allow"
+        Action   = ["s3:ListBucket"]
+        Resource = [aws_s3_bucket.uploads.arn]
+      }
+    ]
+  })
+}
+
 resource "aws_iam_instance_profile" "app" {
   name = "${var.name_prefix}-app-profile"
   role = aws_iam_role.app.name

@@ -84,6 +84,21 @@ output "ecr_nest_url" {
   value       = module.compute.ecr_nest_url
 }
 
+output "uploads_bucket_name" {
+  description = "앱 이미지 업로드 S3 버킷"
+  value       = module.compute.uploads_bucket_name
+}
+
+output "waf_web_acl_arn" {
+  description = "ALB WAFv2 Web ACL ARN"
+  value       = module.compute.waf_web_acl_arn
+}
+
+output "waf_web_acl_name" {
+  description = "ALB WAFv2 Web ACL 이름"
+  value       = module.compute.waf_web_acl_name
+}
+
 output "cloudwatch_dashboard_name" {
   description = "CloudWatch 대시보드 이름"
   value       = module.compute.cloudwatch_dashboard_name

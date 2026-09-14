@@ -116,3 +116,20 @@ variable "enable_monitoring" {
   type        = bool
   default     = true
 }
+
+variable "nat_gateway_id" {
+  description = "NAT Gateway ID — ASG가 NAT 준비 전에 기동되지 않도록 의존성에 사용"
+  type        = string
+}
+
+variable "enable_waf" {
+  description = "ALB에 WAFv2 Web ACL 연결 (기본 관리형 룰 + 레이트리밋)"
+  type        = bool
+  default     = true
+}
+
+variable "waf_rate_limit" {
+  description = "WAF IP당 5분 요청 상한 (rate-based rule)"
+  type        = number
+  default     = 2000
+}

@@ -60,3 +60,23 @@ output "cloudwatch_alarm_names" {
     aws_cloudwatch_metric_alarm.asg_in_service[0].alarm_name,
   ] : []
 }
+
+output "uploads_bucket_name" {
+  description = "앱 이미지 업로드 S3 버킷"
+  value       = aws_s3_bucket.uploads.bucket
+}
+
+output "uploads_bucket_arn" {
+  description = "앱 이미지 업로드 S3 버킷 ARN"
+  value       = aws_s3_bucket.uploads.arn
+}
+
+output "waf_web_acl_arn" {
+  description = "ALB에 연결된 WAFv2 Web ACL ARN (미사용 시 null)"
+  value       = var.enable_waf ? aws_wafv2_web_acl.alb[0].arn : null
+}
+
+output "waf_web_acl_name" {
+  description = "WAFv2 Web ACL 이름"
+  value       = var.enable_waf ? aws_wafv2_web_acl.alb[0].name : null
+}

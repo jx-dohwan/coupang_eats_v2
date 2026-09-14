@@ -84,6 +84,15 @@ module "compute" {
   asg_desired       = local.asg_desired
 
   tags = local.tags
+
+  # NAT·프라이빗 라우트가 준비된 뒤에만 ASG 기동 (userdata apt/ECR pull)
+  nat_gateway_id = module.network.nat_gateway_id
+
+  # ALB 앞단 기본 WAF (관리형 룰 + IP 레이트리밋)
+  enable_waf     = local.enable_waf
+  waf_rate_limit = local.waf_rate_limit
+
+  depends_on = [module.network]
 }
 
 module "database" {
@@ -104,3 +113,4 @@ module "database" {
 
   tags = local.tags
 }
+

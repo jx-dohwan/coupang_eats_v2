@@ -12,6 +12,15 @@ export async function signOut() {
   setAccessToken(null);
 }
 
+/** 이메일 인증 링크 처리 (GET /auth/verify-email?token=) */
+export async function verifyEmail(token: string) {
+  const { data } = await apiClient.get<{ message?: string; data?: { message?: string } }>(
+    '/auth/verify-email',
+    { params: { token } },
+  );
+  return data;
+}
+
 export async function getHealth() {
   const { data } = await apiClient.get<{ status: string }>('/health');
   return data;
